@@ -44,8 +44,16 @@ echo "==> Installing zellij config"
 # Create directory structure
 mkdir -p "$ZELLIJ_CONFIG_DIR/layouts" "$ZELLIJ_CONFIG_DIR/themes" "$ZELLIJ_CONFIG_DIR/plugins"
 
+# Detect available shell (prefer zsh, fall back to bash)
+if command -v zsh >/dev/null 2>&1; then
+  DEFAULT_SHELL="zsh"
+else
+  DEFAULT_SHELL="bash"
+fi
+
 # Copy config files
 cp -f "$REPO_DIR/config.kdl"                    "$ZELLIJ_CONFIG_DIR/config.kdl"
+sed -i "s|default_shell \"zsh\"|default_shell \"$DEFAULT_SHELL\"|" "$ZELLIJ_CONFIG_DIR/config.kdl"
 cp -f "$REPO_DIR/status.sh"                     "$ZELLIJ_CONFIG_DIR/status.sh"
 cp -f "$REPO_DIR/layouts/default.kdl"            "$ZELLIJ_CONFIG_DIR/layouts/default.kdl"
 cp -f "$REPO_DIR/layouts/default.swap.kdl"       "$ZELLIJ_CONFIG_DIR/layouts/default.swap.kdl"
