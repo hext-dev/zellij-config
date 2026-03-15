@@ -31,7 +31,7 @@ case "$1" in
     ;;
   conn_ssh)
     conn=$(detect_connection)
-    [ "$conn" = "ssh" ] && printf ' \uf023'
+    [[ "$conn" = "ssh" || "$conn" = "devpod" ]] && printf ' \uf023'
     ;;
   conn_local)
     conn=$(detect_connection)
