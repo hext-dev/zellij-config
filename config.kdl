@@ -3,7 +3,6 @@ default_layout "default"
 
 show_startup_tips false
 show_release_notes false
-auto_accept_permissions true
 
 theme "catppuccin_mocha"
 
