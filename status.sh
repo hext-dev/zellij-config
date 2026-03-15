@@ -3,6 +3,8 @@
 
 export LANG=en_US.UTF-8
 
+MACHINE_ID_CONF="$HOME/.config/zellij/machine-id.conf"
+
 detect_connection() {
   if [ -f /tmp/zellij-conntype ]; then
     cat /tmp/zellij-conntype
@@ -16,14 +18,25 @@ detect_connection() {
 }
 
 case "$1" in
+  machine_icon)
+    if [ -f "$MACHINE_ID_CONF" ]; then
+      source "$MACHINE_ID_CONF"
+      printf "#[fg=%s]%s" "$COLOR" "$ICON"
+    fi
+    ;;
   host)
-    if [ -f /etc/bootstrap-hostname ]; then
+    if [ -f "$MACHINE_ID_CONF" ]; then
+      source "$MACHINE_ID_CONF"
+      printf "#[fg=%s]%s" "$COLOR" "$NAME"
+    elif [ -f /etc/bootstrap-hostname ]; then
       h=$(cat /etc/bootstrap-hostname)
+      [ ${#h} -gt 14 ] && h="${h:0:14}…"
+      echo "$h"
     else
       h=$(hostname)
+      [ ${#h} -gt 14 ] && h="${h:0:14}…"
+      echo "$h"
     fi
-    [ ${#h} -gt 14 ] && h="${h:0:14}…"
-    echo "$h"
     ;;
   conn_mosh)
     conn=$(detect_connection)

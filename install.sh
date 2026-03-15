@@ -54,6 +54,8 @@ fi
 # Copy config files, prepend detected shell
 { echo "default_shell \"$DEFAULT_SHELL\""; cat "$REPO_DIR/config.kdl"; } > "$ZELLIJ_CONFIG_DIR/config.kdl"
 cp -f "$REPO_DIR/status.sh"                     "$ZELLIJ_CONFIG_DIR/status.sh"
+cp -f "$REPO_DIR/configure-icon.sh"             "$ZELLIJ_CONFIG_DIR/configure-icon.sh"
+chmod +x "$ZELLIJ_CONFIG_DIR/configure-icon.sh"
 cp -f "$REPO_DIR/layouts/default.kdl"            "$ZELLIJ_CONFIG_DIR/layouts/default.kdl"
 cp -f "$REPO_DIR/layouts/default.swap.kdl"       "$ZELLIJ_CONFIG_DIR/layouts/default.swap.kdl"
 cp -f "$REPO_DIR/themes/catppuccin_mocha.kdl"    "$ZELLIJ_CONFIG_DIR/themes/catppuccin_mocha.kdl"
@@ -82,6 +84,13 @@ cat > "$ZELLIJ_CACHE_DIR/permissions.kdl" << EOF
 }
 EOF
 echo "    zjstatus permissions configured"
+
+# Set machine icon on first run (random icon + color + auto hostname)
+if [[ ! -f "$ZELLIJ_CONFIG_DIR/machine-id.conf" ]]; then
+  bash "$ZELLIJ_CONFIG_DIR/configure-icon.sh"
+else
+  echo "    Machine icon already configured (run ~/.config/zellij/configure-icon.sh --pick to change)"
+fi
 
 # Warn about stale sessions if auto-attach is configured
 if grep -q 'zellij attach' ~/.bashrc ~/.zshrc 2>/dev/null; then

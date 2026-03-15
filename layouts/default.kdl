@@ -17,7 +17,7 @@ layout {
                 color_yellow  "#F9E2AF"
                 color_peach   "#FAB387"
 
-                format_left  "#[bg=$bg,fg=$mauve,bold] {command_host}#[fg=$yellow]{command_conn_mosh}#[fg=$teal]{command_conn_ssh}#[fg=$blue]{command_conn_local}"
+                format_left  "#[bg=$bg]#[fg=$yellow]{command_conn_mosh}#[fg=$teal]{command_conn_ssh}#[fg=$blue]{command_conn_local} #[bold]{command_machine_icon} {command_host}"
                 format_center "#[bg=$bg,fg=$overlay]{command_ip} #[fg=$surface0]│#[fg=$overlay] {command_cpu} #[fg=$surface0]│#[fg=$overlay] {command_mem} #[fg=$surface0]│#[fg=$overlay] {command_network}"
                 format_right "#[bg=$bg]{tabs}#[bg=$bg,fg=$overlay] {datetime}"
 
@@ -30,6 +30,11 @@ layout {
 
                 tab_normal   "#[fg=$overlay,bg=$bg] {index} "
                 tab_active   "#[fg=$green,bg=$bg,bold] {index} "
+
+                command_machine_icon_command "bash -c '$HOME/.config/zellij/status.sh machine_icon'"
+                command_machine_icon_format "{stdout}"
+                command_machine_icon_interval "0"
+                command_machine_icon_rendermode "static"
 
                 command_host_command "bash -c '$HOME/.config/zellij/status.sh host'"
                 command_host_format "{stdout}"
