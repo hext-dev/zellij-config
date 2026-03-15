@@ -83,4 +83,20 @@ cat > "$ZELLIJ_CACHE_DIR/permissions.kdl" << EOF
 EOF
 echo "    zjstatus permissions configured"
 
+# Warn about stale sessions if auto-attach is configured
+if grep -q 'zellij attach' ~/.bashrc ~/.zshrc 2>/dev/null; then
+  SESSION_NAME=$(grep -ohP 'zellij attach \K\S+' ~/.bashrc ~/.zshrc 2>/dev/null | head -1)
+  if [[ -n "$SESSION_NAME" ]] && command -v zellij >/dev/null 2>&1; then
+    if zellij list-sessions 2>/dev/null | grep -q "$SESSION_NAME"; then
+      echo ""
+      echo "    NOTE: Existing zellij session '$SESSION_NAME' is still running."
+      echo "    Zellij does not reload config for existing sessions."
+      echo "    To apply the new config, either:"
+      echo "      1. Change the session name in your shell rc (e.g. 'main2' instead of '$SESSION_NAME')"
+      echo "      2. Exit all panes in the session (it will be recreated on next login)"
+      echo "      3. From inside zellij: Ctrl+o, d (detach), then 'zellij delete-session $SESSION_NAME'"
+    fi
+  fi
+fi
+
 echo "==> Done"
