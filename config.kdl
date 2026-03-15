@@ -1,0 +1,20 @@
+default_shell "zsh"
+default_layout "default"
+
+show_startup_tips false
+show_release_notes false
+auto_accept_permissions true
+
+theme "catppuccin_mocha"
+
+keybinds {
+    normal {
+        bind "Alt -" { NextSwapLayout; }
+    }
+}
+
+ui {
+    pane_frames {
+        rounded_corners true
+    }
+}
