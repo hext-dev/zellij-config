@@ -1,0 +1,77 @@
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="file:~/.config/zellij/plugins/zjstatus.wasm" {
+                // Catppuccin Mocha palette
+                color_bg      "#000000"
+                color_text    "#CDD6F4"
+                color_subtext "#A6ADC8"
+                color_overlay "#6C7086"
+                color_surface0 "#313244"
+                color_pink    "#F5C2E7"
+                color_mauve   "#CBA6F7"
+                color_lavender "#B4BEFE"
+                color_blue    "#89B4FA"
+                color_teal    "#94E2D5"
+                color_green   "#A6E3A1"
+                color_yellow  "#F9E2AF"
+                color_peach   "#FAB387"
+
+                format_left  "#[bg=$bg,fg=$mauve,bold] {command_host}#[fg=$yellow]{command_conn_mosh}#[fg=$teal]{command_conn_ssh}#[fg=$blue]{command_conn_local}"
+                format_center "#[bg=$bg,fg=$overlay]{command_ip} #[fg=$surface0]│#[fg=$overlay] {command_cpu} #[fg=$surface0]│#[fg=$overlay] {command_mem} #[fg=$surface0]│#[fg=$overlay] {command_network}"
+                format_right "#[bg=$bg]{tabs}#[bg=$bg,fg=$overlay] {datetime}"
+
+                datetime "#[fg=$overlay]{format}"
+                datetime_format "%H:%M UTC"
+                datetime_timezone "UTC"
+                format_space "#[bg=$bg]"
+                format_hide_on_overlength "true"
+                format_precedence "lrc"
+
+                tab_normal   "#[fg=$overlay,bg=$bg] {index} "
+                tab_active   "#[fg=$green,bg=$bg,bold] {index} "
+
+                command_host_command "bash -c '$HOME/.config/zellij/status.sh host'"
+                command_host_format "{stdout}"
+                command_host_interval "0"
+                command_host_rendermode "static"
+
+                command_conn_mosh_command "bash -c '$HOME/.config/zellij/status.sh conn_mosh'"
+                command_conn_mosh_format "{stdout}"
+                command_conn_mosh_interval "5"
+                command_conn_mosh_rendermode "dynamic"
+
+                command_conn_ssh_command "bash -c '$HOME/.config/zellij/status.sh conn_ssh'"
+                command_conn_ssh_format "{stdout}"
+                command_conn_ssh_interval "5"
+                command_conn_ssh_rendermode "dynamic"
+
+                command_conn_local_command "bash -c '$HOME/.config/zellij/status.sh conn_local'"
+                command_conn_local_format "{stdout}"
+                command_conn_local_interval "5"
+                command_conn_local_rendermode "dynamic"
+
+                command_ip_command "bash -c '$HOME/.config/zellij/status.sh ip'"
+                command_ip_format "{stdout}"
+                command_ip_interval "0"
+                command_ip_rendermode "static"
+
+                command_cpu_command "bash -c '$HOME/.config/zellij/status.sh cpu'"
+                command_cpu_format "{stdout}"
+                command_cpu_interval "1"
+                command_cpu_rendermode "dynamic"
+
+                command_mem_command "bash -c '$HOME/.config/zellij/status.sh mem'"
+                command_mem_format "{stdout}"
+                command_mem_interval "1"
+                command_mem_rendermode "dynamic"
+
+                command_network_command "bash -c '$HOME/.config/zellij/status.sh network'"
+                command_network_format "{stdout}"
+                command_network_interval "2"
+                command_network_rendermode "dynamic"
+            }
+        }
+        children
+    }
+}

@@ -1,0 +1,31 @@
+themes {
+    catppuccin_mocha {
+        fg 205 214 244        // text #cdd6f4
+        bg 30 30 46           // base #1e1e2e
+        black 17 17 27        // crust #11111b
+        red 243 139 168       // red #f38ba8
+        green 166 227 161     // green #a6e3a1
+        yellow 249 226 175    // yellow #f9e2af
+        blue 137 180 250      // blue #89b4fa
+        magenta 203 166 247   // mauve #cba6f7
+        cyan 148 226 213      // teal #94e2d5
+        white 205 214 244     // text #cdd6f4
+        orange 250 179 135    // peach #fab387
+        frame_selected {
+            base 166 227 161       // green
+            background 30 30 46    // base
+            emphasis_0 166 227 161
+            emphasis_1 166 227 161
+            emphasis_2 166 227 161
+            emphasis_3 166 227 161
+        }
+        frame_unselected {
+            base 69 71 90          // surface1 #45475a
+            background 30 30 46    // base
+            emphasis_0 49 50 68    // surface0 #313244
+            emphasis_1 49 50 68
+            emphasis_2 49 50 68
+            emphasis_3 49 50 68
+        }
+    }
+}
