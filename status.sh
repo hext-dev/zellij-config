@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Zellij status bar script
 
 export LANG=en_US.UTF-8
