@@ -17,7 +17,7 @@ layout {
                 color_yellow  "#F9E2AF"
                 color_peach   "#FAB387"
 
-                format_left  "#[bg=$bg,bold]{command_machine_icon} {command_host}"
+                format_left  "#[bg=$bg,bold]{command_machine_icon}  {command_host}"
                 format_center "#[bg=$bg,fg=$overlay]{command_ip} #[fg=$surface0]│#[fg=$overlay] {command_cpu} #[fg=$surface0]│#[fg=$overlay] {command_mem} #[fg=$surface0]│#[fg=$overlay] {command_network}"
                 format_right "#[bg=$bg]{tabs}#[bg=$bg,fg=$overlay] {datetime}#[fg=$overlay]{command_conn_mosh}{command_conn_ssh}{command_conn_local}"
 
