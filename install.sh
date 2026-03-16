@@ -100,9 +100,9 @@ echo "    zjstatus permissions configured"
 # Set machine icon on first run (random icon + color + auto hostname)
 if [[ ! -f "$ZELLIJ_CONFIG_DIR/machine-id.conf" ]]; then
   bash "$ZELLIJ_CONFIG_DIR/configure.sh" icon --random
-  echo "    To change: zjbar icon --pick"
+  echo "    To change: zjbar icon"
 else
-  echo "    Machine icon already configured (run 'zjbar icon --pick' to change)"
+  echo "    Machine icon already configured (run 'zjbar icon' to change)"
 fi
 
 # Warn about stale sessions if auto-attach is configured
