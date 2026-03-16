@@ -40,14 +40,28 @@ auto_hostname() {
 }
 
 detect_timezone() {
-  if [[ -n "${TZ:-}" ]]; then
+  if [[ -n "${TZ:-}" && "${TZ:-}" != "UTC" && "${TZ:-}" != "Etc/UTC" ]]; then
     echo "$TZ"
-  elif [[ -f /etc/timezone ]]; then
+  elif [[ -f /etc/timezone ]] && [[ "$(cat /etc/timezone)" != "Etc/UTC" && "$(cat /etc/timezone)" != "UTC" ]]; then
     cat /etc/timezone
   elif command -v timedatectl >/dev/null 2>&1; then
-    timedatectl show -p Timezone --value 2>/dev/null || echo "UTC"
+    local tz
+    tz=$(timedatectl show -p Timezone --value 2>/dev/null || echo "")
+    if [[ -n "$tz" && "$tz" != "UTC" && "$tz" != "Etc/UTC" ]]; then
+      echo "$tz"
+    else
+      echo "UTC"
+    fi
   else
     echo "UTC"
+  fi
+}
+
+detect_timezone_by_ip() {
+  if command -v curl >/dev/null 2>&1; then
+    curl -s --max-time 3 ipinfo.io/timezone 2>/dev/null || echo ""
+  else
+    echo ""
   fi
 }
 
@@ -192,6 +206,19 @@ cmd_icon() {
 cmd_timezone() {
   local tz="${1:-}"
 
+  if [[ "$tz" == "auto" ]]; then
+    tz=$(detect_timezone)
+    if [[ "$tz" == "UTC" ]]; then
+      echo "    System timezone is UTC, trying IP geolocation..."
+      tz=$(detect_timezone_by_ip)
+      if [[ -z "$tz" ]]; then
+        echo "    Could not detect timezone" >&2
+        exit 1
+      fi
+    fi
+    echo "    Auto-detected: $tz"
+  fi
+
   if [[ -z "$tz" ]]; then
     local current detected
     current=$(current_layout_timezone)
@@ -246,6 +273,7 @@ if [[ $# -eq 0 ]]; then
   echo "  icon --random         Random icon + color (used by install)"
   echo "  icon --custom GLYPH  Set a specific nerd font glyph"
   echo "  timezone              Interactive timezone picker"
+  echo "  timezone auto         Auto-detect (system, then IP geolocation)"
   echo "  timezone ZONE         Set timezone directly (e.g. America/New_York)"
   exit 0
 fi
