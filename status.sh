@@ -21,7 +21,7 @@ case "$1" in
   machine_icon)
     if [ -f "$MACHINE_ID_CONF" ]; then
       source "$MACHINE_ID_CONF"
-      printf "#[fg=%s]%s" "$COLOR" "$ICON"
+      printf "#[fg=%s]%s" "$COLOR" "$ICON "
     fi
     ;;
   host)
