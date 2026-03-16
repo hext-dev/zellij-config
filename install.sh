@@ -51,17 +51,28 @@ else
   DEFAULT_SHELL="bash"
 fi
 
+# Detect timezone
+if [[ -n "${TZ:-}" ]]; then
+  TIMEZONE="$TZ"
+elif [[ -f /etc/timezone ]] && [[ "$(cat /etc/timezone)" != "Etc/UTC" ]]; then
+  TIMEZONE=$(cat /etc/timezone)
+elif command -v timedatectl >/dev/null 2>&1; then
+  TIMEZONE=$(timedatectl show -p Timezone --value 2>/dev/null || echo "UTC")
+else
+  TIMEZONE="UTC"
+fi
+
 # Copy config files, prepend detected shell
 { echo "default_shell \"$DEFAULT_SHELL\""; cat "$REPO_DIR/config.kdl"; } > "$ZELLIJ_CONFIG_DIR/config.kdl"
 cp -f "$REPO_DIR/status.sh"                     "$ZELLIJ_CONFIG_DIR/status.sh"
-cp -f "$REPO_DIR/configure-icon.sh"             "$ZELLIJ_CONFIG_DIR/configure-icon.sh"
+cp -f "$REPO_DIR/configure.sh"                  "$ZELLIJ_CONFIG_DIR/configure.sh"
 cp -f "$REPO_DIR/icons.tsv"                     "$ZELLIJ_CONFIG_DIR/icons.tsv"
-chmod +x "$ZELLIJ_CONFIG_DIR/configure-icon.sh"
-cp -f "$REPO_DIR/layouts/default.kdl"            "$ZELLIJ_CONFIG_DIR/layouts/default.kdl"
+chmod +x "$ZELLIJ_CONFIG_DIR/configure.sh"
+sed "s|__TIMEZONE__|$TIMEZONE|g" "$REPO_DIR/layouts/default.kdl" > "$ZELLIJ_CONFIG_DIR/layouts/default.kdl"
 cp -f "$REPO_DIR/layouts/default.swap.kdl"       "$ZELLIJ_CONFIG_DIR/layouts/default.swap.kdl"
 cp -f "$REPO_DIR/themes/catppuccin_mocha.kdl"    "$ZELLIJ_CONFIG_DIR/themes/catppuccin_mocha.kdl"
 chmod +x "$ZELLIJ_CONFIG_DIR/status.sh"
-echo "    Config files copied"
+echo "    Config files copied (timezone: $TIMEZONE)"
 
 # Download zjstatus plugin
 ZJSTATUS_PATH="$ZELLIJ_CONFIG_DIR/plugins/zjstatus.wasm"
@@ -88,10 +99,10 @@ echo "    zjstatus permissions configured"
 
 # Set machine icon on first run (random icon + color + auto hostname)
 if [[ ! -f "$ZELLIJ_CONFIG_DIR/machine-id.conf" ]]; then
-  bash "$ZELLIJ_CONFIG_DIR/configure-icon.sh"
-  echo "    To change: configure-icon --pick"
+  bash "$ZELLIJ_CONFIG_DIR/configure.sh" icon --random
+  echo "    To change: zjbar icon --pick"
 else
-  echo "    Machine icon already configured (run 'configure-icon --pick' to change)"
+  echo "    Machine icon already configured (run 'zjbar icon --pick' to change)"
 fi
 
 # Warn about stale sessions if auto-attach is configured
